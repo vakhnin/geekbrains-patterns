@@ -1,3 +1,6 @@
+from urls import urlpatterns
+
+
 class Framework:
 
     def __call__(self, environ, start_response):
@@ -8,10 +11,8 @@ class Framework:
             path += '/'
 
         code = '200 Ok'
-        if path == '/':
-            answer = 'Index page'
-        elif path == '/about/':
-            answer = 'About page'
+        if path in urlpatterns.keys():
+            answer = urlpatterns[path]()
         else:
             code = '404 Not found'
             answer = '404 Not found'
