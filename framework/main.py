@@ -1,8 +1,8 @@
-from urls import urlpatterns
+from framework.urls import urlpatterns
+from framework.views import Page404View
 
 
 class Framework:
-
     def __call__(self, environ, start_response):
         path = environ['PATH_INFO']
 
@@ -10,12 +10,11 @@ class Framework:
         if not path.endswith('/'):
             path += '/'
 
-        code = '200 Ok'
         if path in urlpatterns.keys():
-            answer = urlpatterns[path]()
+            view = urlpatterns[path]
         else:
-            code = '404 Not found'
-            answer = '404 Not found'
+            view = Page404View()
+        code, answer = view()
 
         start_response(code, [('Content-Type', 'text/html')])
         return [answer.encode('utf-8')]
