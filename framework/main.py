@@ -10,11 +10,12 @@ class Framework:
         if not path.endswith('/'):
             path += '/'
 
+        request = {}
         if path in urlpatterns.keys():
             view = urlpatterns[path]
         else:
             view = Page404View()
-        code, answer = view()
+        code, answer = view(request)
 
         start_response(code, [('Content-Type', 'text/html')])
         return [answer.encode('utf-8')]
