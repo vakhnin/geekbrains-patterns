@@ -1,3 +1,6 @@
+from urllib import parse
+
+from framework.requests import GetRequests
 from framework.urls import urlpatterns
 from framework.views import Page404View
 
@@ -11,6 +14,15 @@ class Framework:
             path += '/'
 
         request = {}
+        # Получаем все данные запроса
+        method = environ['REQUEST_METHOD']
+        request['method'] = method
+
+        if method == 'GET':
+            request_params = parse.parse_qs(environ['QUERY_STRING'])
+            request['request_params'] = request_params
+            print(f'GET запрос: {request_params}')
+
         if path in urlpatterns.keys():
             view = urlpatterns[path]
         else:
