@@ -18,12 +18,30 @@
 <div class="content">
     <h3>Контакты</h3>
 
-    <form action="" method="post">
-        <div></div>
-
+    <h4>Get форма</h4>
+    <form action="" method="get">
+        <fieldset>
+            <legend>Обращение</legend>
+            <p>
+                <label class="title" for="email1">Ваш email:</label>
+                <input type="text" name="email1" id="email1">
+            </p>
+            <p>
+                <label class="title" for="subject1">Тема обращения:</label>
+                <input type="text" name="subject1" id="subject1">
+            </p>
+            <p>
+                <label class="title" for="message1">Обращение:</label>
+            </p>
+            <p>
+                <textarea name="message1" id="message1"></textarea>
+            </p>
+        </fieldset>
+        <div class="submit"><input type="submit" value="Отправить"></div>
     </form>
 
-    <form action="" method="get">
+    <h4>POST форма</h4>
+    <form action="" method="post">
         <fieldset>
             <legend>Обращение</legend>
             <p>
@@ -35,10 +53,10 @@
                 <input type="text" name="subject" id="subject">
             </p>
             <p>
-                <label class="title" for="appeal">Обращение:</label>
+                <label class="title" for="message">Обращение:</label>
             </p>
             <p>
-                <textarea name="appeal" id="appeal"></textarea>
+                <textarea name="message" id="message"></textarea>
             </p>
         </fieldset>
         <div class="submit"><input type="submit" value="Отправить"></div>
