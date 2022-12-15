@@ -21,3 +21,11 @@ class AboutView:
 
     def __call__(self, request):
         return '200 OK', render(self.template, title=self.title)
+
+
+class ContactsView:
+    template = 'contacts.html'
+    title = 'Контакты'
+
+    def __call__(self, request):
+        return '200 OK', render(self.template, title=self.title)
