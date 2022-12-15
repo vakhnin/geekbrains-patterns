@@ -8,24 +8,20 @@ class Page404View:
 
 class IndexView:
     template = 'index.html'
-    title = 'Главная'
 
     def __call__(self, request):
-        request['title'] = self.title
-        return '200 OK', render(self.template, title=self.title)
+        return '200 OK', render(self.template)
 
 
 class AboutView:
     template = 'about.html'
-    title = 'About'
 
     def __call__(self, request):
-        return '200 OK', render(self.template, title=self.title)
+        return '200 OK', render(self.template)
 
 
 class ContactsView:
     template = 'contacts.html'
-    title = 'Контакты'
 
     def __call__(self, request):
-        return '200 OK', render(self.template, title=self.title)
+        return '200 OK', render(self.template)
