@@ -1,46 +1,14 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{title}}</title>
-</head>
-<body>
-<div class="menu">
-    <ul>
-        <li><a href="/">Главная</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/contacts">Контакты</a></li>
-    </ul>
-</div>
+{% extends "base.html" %}
+{% block title %}
+Контакты
+{% endblock %}
+{% block menu %}
+{% include "inc-menu.html" %}
+{% endblock %}
+{% block body %}
 <div class="content">
     <h3>Контакты</h3>
 
-    <h4>Get форма</h4>
-    <form action="" method="get">
-        <fieldset>
-            <legend>Обращение</legend>
-            <p>
-                <label class="title" for="email1">Ваш email:</label>
-                <input type="text" name="email1" id="email1">
-            </p>
-            <p>
-                <label class="title" for="subject1">Тема обращения:</label>
-                <input type="text" name="subject1" id="subject1">
-            </p>
-            <p>
-                <label class="title" for="message1">Обращение:</label>
-            </p>
-            <p>
-                <textarea name="message1" id="message1"></textarea>
-            </p>
-        </fieldset>
-        <div class="submit"><input type="submit" value="Отправить"></div>
-    </form>
-
-    <h4>POST форма</h4>
     <form action="" method="post">
         <fieldset>
             <legend>Обращение</legend>
@@ -62,5 +30,4 @@
         <div class="submit"><input type="submit" value="Отправить"></div>
     </form>
 </div>
-</body>
-</html>
+{% endblock %}
