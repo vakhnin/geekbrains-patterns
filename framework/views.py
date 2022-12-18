@@ -13,6 +13,13 @@ class IndexView:
         return '200 OK', render(self.template)
 
 
+class CategoryView:
+    template = 'category.html'
+
+    def __call__(self, request):
+        return '200 OK', render(self.template)
+
+
 class AboutView:
     template = 'about.html'
 
