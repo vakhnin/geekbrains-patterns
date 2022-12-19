@@ -7,6 +7,9 @@ class Category:
         self.name = name
         self.category = category
 
+    def __repr__(self):
+        return f'<Category: {self.id} - id, "{self.name}" - name>'
+
 
 class Engine:
     def __init__(self):
