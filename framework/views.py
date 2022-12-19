@@ -26,12 +26,36 @@ class CategoryView:
         logger.log('Категории')
         if request['method'] == 'POST':
             data = request['data']
-            name = data['name'][0]
+            if 'name' in data.keys():
+                name = data['name'][0]
 
-            new_category = site.create_category(name)
-
-            site.categories.append(new_category)
+                new_category = site.create_category(name)
+                site.categories.append(new_category)
         return '200 OK', render(self.template, categories=site.categories)
+
+
+class CourseView:
+    template = 'course.html'
+
+    def __call__(self, request):
+        logger.log('Курсы')
+        if request['method'] == 'POST':
+            data = request['data']
+            if 'name' in data.keys() \
+                    and 'category_id' in data.keys():
+                name = data['name'][0]
+                category_id = data['category_id'][0]
+
+                new_course = site.create_course(name, category_id)
+                site.courses.append(new_course)
+
+        courses = site.courses
+        for course in courses:
+            category = site.category_by_id(course.category)
+            if category:
+                course.category_name = category.name
+        return '200 OK', render(self.template,
+                                categories=site.categories, courses=courses)
 
 
 class AboutView:

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}
+Курс
+{% endblock %}
+{% block menu %}
+{% include "inc-menu.html" %}
+{% endblock %}
+{% block body %}
+<div class="content">
+    <h3>Курс</h3>
+    <h4>Создание курса</h4>
+    <div>Для создания курса добавьте <a href="/category">категорию</a></div>
+    <br>
+    <form method="post">
+        <div>
+            <select name="category_id">
+                <option value="">--Выберите категорию--</option>
+                {% for item in categories %}
+                <option value="{{item.id}}">{{item.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <input type="text" name="name" placeholder="Название категории">
+        </div>
+        <div>
+            <button type="submit">Сохранить</button>
+        </div>
+    </form>
+    <h4>Список курсов</h4>
+    <ul>
+        {% for item in courses %}
+        <li>
+            Курс: {{item.name}} из категории {{item.category_name}}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

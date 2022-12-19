@@ -1,23 +1,47 @@
 class Category:
     auto_id = 0
 
-    def __init__(self, name, category):
+    def __init__(self, name):
         self.id = Category.auto_id
         Category.auto_id += 1
         self.name = name
-        self.category = category
 
     def __repr__(self):
         return f'<Category: {self.id} - id, "{self.name}" - name>'
 
 
+class Course:
+    auto_id = 0
+
+    def __init__(self, name, category_id):
+        self.id = Category.auto_id
+        Course.auto_id += 1
+        self.name = name
+        self.category = category_id
+
+    def __repr__(self):
+        return f'<Course: {self.id} - id, "{self.name}" - name, ' \
+               f'{self.category} - category_id>'
+
+
 class Engine:
     def __init__(self):
         self.categories = []
+        self.courses = []
 
     @staticmethod
-    def create_category(name, category=None):
-        return Category(name, category)
+    def create_category(name):
+        return Category(name)
+
+    @staticmethod
+    def create_course(name, category_id):
+        return Course(name, category_id)
+
+    def category_by_id(self, id):
+        for item in self.categories:
+            if int(item.id) == int(id):
+                return item
+        return None
 
 
 class SingletonByName(type):
