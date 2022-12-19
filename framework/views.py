@@ -58,6 +58,21 @@ class CourseView:
                                 categories=site.categories, courses=courses)
 
 
+class StudentView:
+    template = 'students.html'
+
+    def __call__(self, request):
+        logger.log('Студенты')
+        if request['method'] == 'POST':
+            data = request['data']
+            if 'name' in data.keys():
+                name = data['name'][0]
+
+                new_student = site.create_user('student', name)
+                site.students.append(new_student)
+        return '200 OK', render(self.template, students=site.students)
+
+
 class AboutView:
     template = 'about.html'
 

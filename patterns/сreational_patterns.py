@@ -1,3 +1,37 @@
+class User:
+    def __init__(self, name):
+        super().__init__()
+        self.name = name
+
+
+class Teacher(User):
+    def __init__(self):
+        super().__init__()
+
+
+class Student(User):
+    auto_id = 0
+
+    def __init__(self, name):
+        super().__init__(name)
+        self.id = Student.auto_id
+        Student.auto_id += 1
+
+    def __repr__(self):
+        return f'<Student: {self.id} - id, "{self.name}" - name>'
+
+
+class UserFactory:
+    types = {
+        'student': Student,
+        'teacher': Teacher
+    }
+
+    @classmethod
+    def create(cls, type_, name):
+        return cls.types[type_](name)
+
+
 class Category:
     auto_id = 0
 
@@ -28,6 +62,11 @@ class Engine:
     def __init__(self):
         self.categories = []
         self.courses = []
+        self.students = []
+
+    @staticmethod
+    def create_user(type_, name):
+        return UserFactory.create(type_, name)
 
     @staticmethod
     def create_category(name):
