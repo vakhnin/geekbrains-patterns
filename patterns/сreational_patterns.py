@@ -16,6 +16,7 @@ class Student(User):
         super().__init__(name)
         self.id = Student.auto_id
         Student.auto_id += 1
+        self.courses = []
 
     def __repr__(self):
         return f'<Student: {self.id} - id, "{self.name}" - name>'
@@ -48,7 +49,7 @@ class Course:
     auto_id = 0
 
     def __init__(self, name, category_id):
-        self.id = Category.auto_id
+        self.id = Course.auto_id
         Course.auto_id += 1
         self.name = name
         self.category = category_id
@@ -81,6 +82,28 @@ class Engine:
             if int(item.id) == int(id):
                 return item
         return None
+
+    def course_by_id(self, id):
+        for item in self.courses:
+            if int(item.id) == int(id):
+                return item
+        return None
+
+    def student_by_id(self, id):
+        for item in self.students:
+            if int(item.id) == int(id):
+                return item
+        return None
+
+    def get_students_enrollments(self):
+        enrollments = []
+        for student in self.students:
+            for course in student.courses:
+                enrollments.append({
+                    'student_name': student.name,
+                    'course_name': course.name,
+                })
+        return enrollments
 
 
 class SingletonByName(type):

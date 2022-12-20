@@ -73,6 +73,25 @@ class StudentView:
         return '200 OK', render(self.template, students=site.students)
 
 
+class EnrollmentView:
+    template = 'enrollment.html'
+
+    def __call__(self, request):
+        logger.log('Записи на курс')
+        if request['method'] == 'POST':
+            data = request['data']
+            if 'student_id' in data.keys() and 'course_id' in data.keys():
+                student_id = data['student_id'][0]
+                course_id = data['course_id'][0]
+
+                student = site.student_by_id(student_id)
+                course = site.course_by_id(course_id)
+                student.courses.append(course)
+        return '200 OK', render(self.template, students=site.students,
+                                courses=site.courses,
+                                enrollments=site.get_students_enrollments())
+
+
 class AboutView:
     template = 'about.html'
 

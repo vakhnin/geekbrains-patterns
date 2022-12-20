@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}
+Запись на курс
+{% endblock %}
+{% block menu %}
+{% include "inc-menu.html" %}
+{% endblock %}
+{% block body %}
+<div class="content">
+    <h3>Запись на курс</h3>
+    <h4>Запись на курс студента</h4>
+    <div>Для записи студента на курс добавьте <a href="/students">студента</a>
+        и <a href="/course">курс</a></div>
+    <br>
+    <form method="post">
+        <div>
+            <select name="student_id">
+                <option value="">--Выберите студента--</option>
+                {% for item in students %}
+                <option value="{{item.id}}">{{item.name}}</option>
+                {% endfor %}
+            </select>
+            <select name="course_id">
+                <option value="">--Выберите курс--</option>
+                {% for item in courses %}
+                <option value="{{item.id}}">{{item.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit">Сохранить</button>
+    </form>
+    <h4>Список записей на курс</h4>
+    <ul>
+        {% for item in enrollments %}
+        <li>
+            Студент "{{item.student_name}}" записан на курс "{{item.course_name}}"
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
