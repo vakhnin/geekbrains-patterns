@@ -19,13 +19,11 @@ class Framework:
 
         if method == 'GET':
             request_params = parse.parse_qs(environ['QUERY_STRING'])
-            request['request_params'] = request_params
-            print(f'GET запрос: {request_params}')
+            request['data'] = request_params
         if method == 'POST':
             data = PostRequests().get_data_from_POST_query(environ)
             request_params = parse.parse_qs(data)
-            request['request_params'] = request_params
-            print(f'POST запрос: {request_params}')
+            request['data'] = request_params
 
         if path in urlpatterns.keys():
             view = urlpatterns[path]

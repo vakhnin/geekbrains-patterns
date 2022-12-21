@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}
+Категория
+{% endblock %}
+{% block menu %}
+{% include "inc-menu.html" %}
+{% endblock %}
+{% block body %}
+<div class="content">
+    <h3>Категория</h3>
+    <h4>Создание категории</h4>
+    <form method="post">
+        <input type="text" name="name" placeholder="Название категории">
+        <button type="submit">Сохранить</button>
+    </form>
+    <h4>Список категорий</h4>
+    <ul>
+        {% for item in categories %}
+        <li>
+            {{item.name}}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
