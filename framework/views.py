@@ -1,8 +1,11 @@
 from framework.templator import render
+from patterns.structural_patterns import AppRoute
 from patterns.сreational_patterns import Engine, Logger
 
 site = Engine()
 logger = Logger('views')
+
+routes = {}
 
 
 class Page404View:
@@ -11,6 +14,7 @@ class Page404View:
         return '404 Not found', '404 Not found'
 
 
+@AppRoute(routes=routes, url='/')
 class IndexView:
     template = 'index.html'
 
@@ -19,6 +23,7 @@ class IndexView:
         return '200 OK', render(self.template)
 
 
+@AppRoute(routes=routes, url='/category/')
 class CategoryView:
     template = 'category.html'
 
@@ -34,6 +39,7 @@ class CategoryView:
         return '200 OK', render(self.template, categories=site.categories)
 
 
+@AppRoute(routes=routes, url='/course/')
 class CourseView:
     template = 'course.html'
 
@@ -58,6 +64,7 @@ class CourseView:
                                 categories=site.categories, courses=courses)
 
 
+@AppRoute(routes=routes, url='/students/')
 class StudentView:
     template = 'students.html'
 
@@ -73,6 +80,7 @@ class StudentView:
         return '200 OK', render(self.template, students=site.students)
 
 
+@AppRoute(routes=routes, url='/enrollments/')
 class EnrollmentView:
     template = 'enrollment.html'
 
@@ -92,6 +100,7 @@ class EnrollmentView:
                                 enrollments=site.get_students_enrollments())
 
 
+@AppRoute(routes=routes, url='/about/')
 class AboutView:
     template = 'about.html'
 
@@ -100,6 +109,7 @@ class AboutView:
         return '200 OK', render(self.template)
 
 
+@AppRoute(routes=routes, url='/contacts/')
 class ContactsView:
     template = 'contacts.html'
 

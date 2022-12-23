@@ -1,11 +1,13 @@
 from urllib import parse
 
 from framework.requests import PostRequests
-from framework.urls import urlpatterns
 from framework.views import Page404View
 
 
 class Framework:
+    def __init__(self, routes_obj):
+        self.routes_lst = routes_obj
+
     def __call__(self, environ, start_response):
         path = environ['PATH_INFO']
 
@@ -25,8 +27,8 @@ class Framework:
             request_params = parse.parse_qs(data)
             request['data'] = request_params
 
-        if path in urlpatterns.keys():
-            view = urlpatterns[path]
+        if path in self.routes_lst:
+            view = self.routes_lst[path]
         else:
             view = Page404View()
         code, answer = view(request)
