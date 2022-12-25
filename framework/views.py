@@ -1,9 +1,13 @@
 from framework.templator import render
+from patterns.behavioral_patterns import EmailNotifier, SmsNotifier
 from patterns.structural_patterns import AppRoute
 from patterns.сreational_patterns import Engine, Logger
 
 site = Engine()
 logger = Logger('views')
+
+email_notifier = EmailNotifier()
+sms_notifier = SmsNotifier()
 
 routes = {}
 
@@ -55,6 +59,9 @@ class CourseView:
                 new_course = site.create_course(name, category_id)
                 site.courses.append(new_course)
 
+                new_course.observers.append(email_notifier)
+                new_course.observers.append(sms_notifier)
+
         courses = site.courses
         for course in courses:
             category = site.category_by_id(course.category)
@@ -94,7 +101,7 @@ class EnrollmentView:
 
                 student = site.student_by_id(student_id)
                 course = site.course_by_id(course_id)
-                student.courses.append(course)
+                course.add_student(student)
         return '200 OK', render(self.template, students=site.students,
                                 courses=site.courses,
                                 enrollments=site.get_students_enrollments())

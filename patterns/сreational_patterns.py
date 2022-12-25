@@ -1,3 +1,6 @@
+from patterns.behavioral_patterns import Subject
+
+
 class User:
     def __init__(self, name):
         super().__init__()
@@ -45,7 +48,7 @@ class Category:
         return f'<Category: {self.id} - id, "{self.name}" - name>'
 
 
-class Course:
+class Course(Subject):
     auto_id = 0
 
     def __init__(self, name, category_id):
@@ -53,6 +56,16 @@ class Course:
         Course.auto_id += 1
         self.name = name
         self.category = category_id
+        self.students = []
+        super().__init__()
+
+    def __getitem__(self, item):
+        return self.students[item]
+
+    def add_student(self, student: Student):
+        self.students.append(student)
+        student.courses.append(self)
+        self.notify()
 
     def __repr__(self):
         return f'<Course: {self.id} - id, "{self.name}" - name, ' \
