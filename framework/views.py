@@ -88,6 +88,8 @@ class StudentView:
 
                 new_student = site.create_user('student', name)
                 site.students.append(new_student)
+                new_student.mark_new()
+                UnitOfWork.get_current().commit()
         mapper = MapperRegistry.get_current_mapper('student')
         students = mapper.all()
         return '200 OK', render(self.template, students=students)

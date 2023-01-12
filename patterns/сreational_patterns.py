@@ -166,6 +166,14 @@ class StudentMapper:
             result.append(student)
         return result
 
+    def insert(self, obj):
+        statement = f"INSERT INTO {self.tablename} (name) VALUES (?)"
+        self.cursor.execute(statement, (obj.name,))
+        try:
+            self.connection.commit()
+        except Exception as e:
+            raise DbCommitException(e.args)
+
 
 connection = connect('patterns.sqlite')
 
@@ -183,3 +191,8 @@ class MapperRegistry:
     @staticmethod
     def get_current_mapper(name):
         return MapperRegistry.mappers[name](connection)
+
+
+class DbCommitException(Exception):
+    def __init__(self, message):
+        super().__init__(f'Db commit error: {message}')
