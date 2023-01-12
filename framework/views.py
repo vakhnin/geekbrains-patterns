@@ -1,13 +1,17 @@
 from framework.templator import render
+from patterns.architectural_system_pattern_unit_of_work import UnitOfWork
 from patterns.behavioral_patterns import EmailNotifier, SmsNotifier
 from patterns.structural_patterns import AppRoute
-from patterns.сreational_patterns import Engine, Logger
+from patterns.сreational_patterns import Engine, Logger, MapperRegistry
 
 site = Engine()
 logger = Logger('views')
 
 email_notifier = EmailNotifier()
 sms_notifier = SmsNotifier()
+
+UnitOfWork.new_current()
+UnitOfWork.get_current().set_mapper_registry(MapperRegistry)
 
 routes = {}
 
@@ -84,7 +88,9 @@ class StudentView:
 
                 new_student = site.create_user('student', name)
                 site.students.append(new_student)
-        return '200 OK', render(self.template, students=site.students)
+        mapper = MapperRegistry.get_current_mapper('student')
+        students = mapper.all()
+        return '200 OK', render(self.template, students=students)
 
 
 @AppRoute(routes=routes, url='/enrollments/')
