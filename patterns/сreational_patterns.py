@@ -1,3 +1,6 @@
+from sqlite3 import connect
+
+from patterns.architectural_system_pattern_unit_of_work import DomainObject
 from patterns.behavioral_patterns import Subject
 
 
@@ -12,7 +15,7 @@ class Teacher(User):
         super().__init__()
 
 
-class Student(User):
+class Student(User, DomainObject):
     auto_id = 0
 
     def __init__(self, name):
@@ -144,3 +147,39 @@ class Logger(metaclass=SingletonByName):
     @staticmethod
     def log(text):
         print('Log:', text)
+
+
+class StudentMapper:
+    def __init__(self, connection):
+        self.connection = connection
+        self.cursor = connection.cursor()
+        self.tablename = 'student'
+
+    def all(self):
+        statement = f'SELECT * from {self.tablename}'
+        self.cursor.execute(statement)
+        result = []
+        for item in self.cursor.fetchall():
+            id, name = item
+            student = Student(name)
+            student.id = id
+            result.append(student)
+        return result
+
+
+connection = connect('patterns.sqlite')
+
+
+class MapperRegistry:
+    mappers = {
+        'student': StudentMapper,
+    }
+
+    @staticmethod
+    def get_mapper(obj):
+        if isinstance(obj, Student):
+            return StudentMapper(connection)
+
+    @staticmethod
+    def get_current_mapper(name):
+        return MapperRegistry.mappers[name](connection)
