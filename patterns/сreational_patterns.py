@@ -67,7 +67,7 @@ class Course(Subject):
 
     def add_student(self, student: Student):
         self.students.append(student)
-        student.courses.append(self)
+        # student.courses.append(self)
         self.notify()
 
     def __repr__(self):
@@ -113,8 +113,8 @@ class Engine:
 
     def get_students_enrollments(self):
         enrollments = []
-        for student in self.students:
-            for course in student.courses:
+        for course in self.courses:
+            for student in course.students:
                 enrollments.append({
                     'student_name': student.name,
                     'course_name': course.name,
@@ -174,6 +174,17 @@ class StudentMapper:
         except Exception as e:
             raise DbCommitException(e.args)
 
+    def find_by_id(self, id):
+        statement = f"SELECT id, name FROM {self.tablename} WHERE id=?"
+        self.cursor.execute(statement, (id,))
+        result = self.cursor.fetchone()
+        if result:
+            student = Student(result[1])
+            student.id = result[0]
+            return student
+        else:
+            raise RecordNotFoundException(f'record with id={id} not found')
+
 
 connection = connect('patterns.sqlite')
 
@@ -196,3 +207,8 @@ class MapperRegistry:
 class DbCommitException(Exception):
     def __init__(self, message):
         super().__init__(f'Db commit error: {message}')
+
+
+class RecordNotFoundException(Exception):
+    def __init__(self, message):
+        super().__init__(f'Record not found: {message}')

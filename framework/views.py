@@ -101,16 +101,18 @@ class EnrollmentView:
 
     def __call__(self, request):
         logger.log('Записи на курс')
+        mapper = MapperRegistry.get_current_mapper('student')
         if request['method'] == 'POST':
             data = request['data']
             if 'student_id' in data.keys() and 'course_id' in data.keys():
                 student_id = data['student_id'][0]
                 course_id = data['course_id'][0]
 
-                student = site.student_by_id(student_id)
+                student = mapper.find_by_id(student_id)
                 course = site.course_by_id(course_id)
                 course.add_student(student)
-        return '200 OK', render(self.template, students=site.students,
+        students = mapper.all()
+        return '200 OK', render(self.template, students=students,
                                 courses=site.courses,
                                 enrollments=site.get_students_enrollments())
 
