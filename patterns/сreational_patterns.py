@@ -185,6 +185,14 @@ class StudentMapper:
         else:
             raise RecordNotFoundException(f'record with id={id} not found')
 
+    def delete(self, obj):
+        statement = f"DELETE FROM {self.tablename} WHERE id=?"
+        self.cursor.execute(statement, (obj.id,))
+        try:
+            self.connection.commit()
+        except Exception as e:
+            raise DbDeleteException(e.args)
+
 
 connection = connect('patterns.sqlite')
 
@@ -212,3 +220,8 @@ class DbCommitException(Exception):
 class RecordNotFoundException(Exception):
     def __init__(self, message):
         super().__init__(f'Record not found: {message}')
+
+
+class DbDeleteException(Exception):
+    def __init__(self, message):
+        super().__init__(f'Db delete error: {message}')

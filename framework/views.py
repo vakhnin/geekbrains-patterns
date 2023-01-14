@@ -95,6 +95,24 @@ class StudentView:
         return '200 OK', render(self.template, students=students)
 
 
+@AppRoute(routes=routes, url='/delete-student/')
+class StudentDeleteView:
+    template = 'student-delete-redirect.html'
+
+    def __call__(self, request):
+        logger.log('Студенты - удаление')
+        mapper = MapperRegistry.get_current_mapper('student')
+        if request['method'] == 'POST':
+            data = request['data']
+            if 'id' in data.keys():
+                student_id = data['id'][0]
+
+                student = mapper.find_by_id(student_id)
+                student.mark_removed()
+                UnitOfWork.get_current().commit()
+        return '200 OK', render(self.template)
+
+
 @AppRoute(routes=routes, url='/enrollments/')
 class EnrollmentView:
     template = 'enrollment.html'
