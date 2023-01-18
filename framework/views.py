@@ -1,13 +1,17 @@
 from framework.templator import render
+from patterns.architectural_system_pattern_unit_of_work import UnitOfWork
 from patterns.behavioral_patterns import EmailNotifier, SmsNotifier
 from patterns.structural_patterns import AppRoute
-from patterns.сreational_patterns import Engine, Logger
+from patterns.сreational_patterns import Engine, Logger, MapperRegistry
 
 site = Engine()
 logger = Logger('views')
 
 email_notifier = EmailNotifier()
 sms_notifier = SmsNotifier()
+
+UnitOfWork.new_current()
+UnitOfWork.get_current().set_mapper_registry(MapperRegistry)
 
 routes = {}
 
@@ -84,7 +88,29 @@ class StudentView:
 
                 new_student = site.create_user('student', name)
                 site.students.append(new_student)
-        return '200 OK', render(self.template, students=site.students)
+                new_student.mark_new()
+                UnitOfWork.get_current().commit()
+        mapper = MapperRegistry.get_current_mapper('student')
+        students = mapper.all()
+        return '200 OK', render(self.template, students=students)
+
+
+@AppRoute(routes=routes, url='/delete-student/')
+class StudentDeleteView:
+    template = 'student-delete-redirect.html'
+
+    def __call__(self, request):
+        logger.log('Студенты - удаление')
+        mapper = MapperRegistry.get_current_mapper('student')
+        if request['method'] == 'POST':
+            data = request['data']
+            if 'id' in data.keys():
+                student_id = data['id'][0]
+
+                student = mapper.find_by_id(student_id)
+                student.mark_removed()
+                UnitOfWork.get_current().commit()
+        return '200 OK', render(self.template)
 
 
 @AppRoute(routes=routes, url='/enrollments/')
@@ -93,16 +119,18 @@ class EnrollmentView:
 
     def __call__(self, request):
         logger.log('Записи на курс')
+        mapper = MapperRegistry.get_current_mapper('student')
         if request['method'] == 'POST':
             data = request['data']
             if 'student_id' in data.keys() and 'course_id' in data.keys():
                 student_id = data['student_id'][0]
                 course_id = data['course_id'][0]
 
-                student = site.student_by_id(student_id)
+                student = mapper.find_by_id(student_id)
                 course = site.course_by_id(course_id)
                 course.add_student(student)
-        return '200 OK', render(self.template, students=site.students,
+        students = mapper.all()
+        return '200 OK', render(self.template, students=students,
                                 courses=site.courses,
                                 enrollments=site.get_students_enrollments())
 
